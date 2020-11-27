@@ -1,11 +1,11 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { navigate } from "../navigationRef";
 import Spacer from "./Spacer";
+import { withNavigation } from "react-navigation";
 
-const NavLink = ({ children, routeName }) => {
+const NavLink = ({ children, routeName, navigation }) => {
   return (
-    <TouchableOpacity onPress={() => navigate(routeName)}>
+    <TouchableOpacity onPress={() => navigation.navigate(routeName)}>
       <Spacer>
         <Text style={styles.link}>{children}</Text>
       </Spacer>
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NavLink;
+export default withNavigation(NavLink);
