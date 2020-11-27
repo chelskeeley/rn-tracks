@@ -40,6 +40,7 @@ const signup = (dispatch) => async ({ email, password }) => {
 
 const signin = (dispatch) => {
   return ({ email, password }) => {
+    console.log(email, password);
     // try to sign in
     // handle success by updating state
     // handle failure by showing error message
