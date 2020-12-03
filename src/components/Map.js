@@ -1,34 +1,41 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import MapView, { Polyline } from "react-native-maps";
+import React, { useContext } from "react";
+import { Text, StyleSheet, ActivityIndicator } from "react-native";
+import MapView, { Polyline, Circle } from "react-native-maps";
+
+import { Context as LocationContext } from "../context/LocationContext";
+import { latitude, longitude } from "../../secret";
 
 const Map = () => {
-  let points = [];
+  const {
+    state: { currentLocation }
+  } = useContext(LocationContext);
 
-  for (let i = 0; i < 20; i++) {
-    if (i % 2 === 0) {
-      points.push({
-        latitude: 37.33233 - i * 0.002,
-        longitude: -122.03121 + i * 0.002
-      });
-    } else {
-      points.push({
-        latitude: 37.33233 + i * 0.001,
-        longitude: -122.03121 + i * 0.001
-      });
-    }
+  if (!currentLocation) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#999999"
+        style={{ marginTop: 200 }}
+      />
+    );
   }
+
+  // TODO: move map if user circle gets close to the edge of Map
   return (
     <MapView
       style={styles.map}
       initialRegion={{
-        latitude: 37.3323,
-        longitude: -122.03121,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05
+        ...currentLocation.coords,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01
       }}
     >
-      <Polyline coordinates={points} />
+      <Circle
+        center={currentLocation.coords}
+        radius={30}
+        strokeColor="rgba(158, 158, 255, 1.0)"
+        fillColor="rgba(158, 158, 255, 0.3)"
+      />
     </MapView>
   );
 };
