@@ -3,7 +3,8 @@ import createDataContext from "./createDataContext";
 const INITIAL_STATE = {
   recording: false,
   locations: [],
-  currentLocation: null
+  currentLocation: null,
+  name: null
 };
 
 const locationReducer = (state, action) => {
@@ -11,17 +12,42 @@ const locationReducer = (state, action) => {
     case "add_current_location":
       console.log("Hi there!");
       return { ...state, currentLocation: action.payload };
+    case "start_recording":
+      return { ...state, recording: true };
+    case "stop_recording":
+      return { ...state, recording: false };
+    case "add_location":
+      return { ...state, locations: [...state.locations, action.payload] };
+    case "change_name":
+      return { ...state, name: action.payload };
+
     default:
       return state;
   }
 };
 
 const actions = {
-  startRecording: (dispatch) => {},
-  stopRecording: (dispatch) => {},
+  startRecording: (dispatch) => {
+    return () => {
+      dispatch({ type: "start_recording" });
+    };
+  },
+  stopRecording: (dispatch) => {
+    return () => {
+      dispatch({ type: "stop_recording" });
+    };
+  },
   addLocation: (dispatch) => {
-    return (location) => {
+    return (location, recording) => {
       dispatch({ type: "add_current_location", payload: location });
+      if (recording) {
+        dispatch({ type: "add_location", payload: location });
+      }
+    };
+  },
+  changeName: (dispatch) => {
+    return (name) => {
+      dispatch({ type: "change_name", payload: name });
     };
   }
 };
