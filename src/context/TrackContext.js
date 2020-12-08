@@ -1,4 +1,5 @@
 import createDataContext from "./createDataContext";
+import trackerApi from "../api/tracker";
 
 const INITIAL_STATE = [];
 
@@ -11,8 +12,8 @@ const trackReducer = (state, action) => {
 
 const actions = {
   fetchTracks: (dispatch) => () => {},
-  createTrack: (dispatch) => (name, locations) => {
-    console.log("save track", name, locations.length);
+  createTrack: (dispatch) => async (name, locations) => {
+    await trackerApi.post("/tracks", { name, locations });
   }
 };
 
